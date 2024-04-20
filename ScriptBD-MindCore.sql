@@ -6,14 +6,15 @@ cnpj char(14) primary key unique,
 nome varchar(45),
 telefone char(11));
 
-create table Estoque (
-idEstoque int primary key auto_increment,
-componente varchar(45),
+create table Componentes (
+idComponente int primary key auto_increment,
+nomeComponente varchar(45),
 quantidade int,
-preco decimal,
+preco decimal(5,2),
 fkEmpresa char(14),
 foreign key (fkEmpresa) references Empresa(cnpj)
 );
+
 create table Sala (
 idSala int primary key auto_increment,
 nome varchar(45),
@@ -21,20 +22,25 @@ andar int,
 fkEmpresa char(14),
 foreign key (fkEmpresa) references Empresa(cnpj)
 );
+
 create table Funcionario (
 idFunc int primary key auto_increment,
 nome varchar(45),
 email varchar(45),
 senha varchar(45),
 telefone char(11),
-tipo varchar(45),
-check (tipo in('empresa','admin','comum')),	
+cargo varchar(45),
+check (cargo in('empresa','admin','comum')),	
+turno varchar(20),
+check (turno in('manhã', 'tarde', 'noite')),
 fkEmpresa char(14),
 foreign key (fkEmpresa) references Empresa(cnpj)
 );
 create table Maquina(
 idMaquina int primary key auto_increment,
+hostname varchar(45),
 ip varchar(45),
+imagem date,
 fkSala int,
 fkEmpresa char(14),
 foreign key (fkSala) references Sala(idSala),
@@ -42,7 +48,7 @@ foreign key (fkEmpresa) references Empresa(cnpj));
 
 -- CRIAR TABELAS PARA CADA HARDWARE, COM SUAS RESPECTIVAS INFORMAÇÕES!!!
 
-create table Historico(
+create table HistoricoManutencao(
 idHistorico int primary key auto_increment,
 Dia date,
 descricao varchar(45),
@@ -54,24 +60,75 @@ foreign key (fkMaquina) references Maquina(idMaquina),
 foreign key (fkSala) references Sala(idSala),
 foreign key (responsavel) references Funcionario(idFunc));
 
-create table infoPc(
+/*create table infoPc(
 idPc int primary key auto_increment,
 sistemaOperacional varchar(100),
 memoriaUso Long,
 discoUso Long,
 fkMaquina int);
 select * from empresa;
-select * from funcionario;
+select * from funcionario; */
 
+create table leituraSO(
+idSO int primary key auto_increment,
+nome varchar(45),
+tempoAtividade long,
+dataLeitura datetime default current_timestamp,
+fkMaquina int,
+foreign key (fkMaquina) references Maquina(idMaquina)
+);
 
+create table leituraDisco(
+idDisco int primary key auto_increment,
+tamanho double,
+leituras double,
+bytesLeitura double,
+escritas double,
+bytesEscrita double,
+tempoTransferencia long,
+dataLeitura datetime default current_timestamp,
+fkMaquina int,
+foreign key (fkMaquina) references Maquina(idMaquina)
+);
 
-        
+create table leituraRede(
+idRede int primary key auto_increment,
+nome varchar(70),
+bytesRecebidos long,
+bytesEnviados long,
+pacotesRecebidos long,
+pacotesEnviados long,
+dataLeitura datetime default current_timestamp,
+fkMaquina int,
+foreign key (fkMaquina) references Maquina(idMaquina)
+);
 
+create table leituraCPU(
+idCPU int primary key auto_increment,
+nome varchar(100),
+emUso double,
+dataLeitura datetime default current_timestamp,
+fkMaquina int,
+foreign key (fkMaquina) references Maquina(idMaquina)
+);
 
+create table leituraMemoriaRam(
+idRam int primary key auto_increment,
+emUso double,
+disponivel double,
+total double,
+dataLeitura datetime default current_timestamp,
+fkMaquina int,
+foreign key (fkMaquina) references Maquina(idMaquina)
+);
 
-
-
-
+select * from Maquina;
+select * from leituraSO;
+select * from leituraDisco;
+select * from leituraMemoriaRam;
+select * from leituraRede;
+select * from leituraCPU;
+select * from Funcionario;
 
 
 
