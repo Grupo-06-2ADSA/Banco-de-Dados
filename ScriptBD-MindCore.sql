@@ -30,7 +30,7 @@ email varchar(45),
 senha varchar(45),
 telefone char(11),
 tipo varchar(45),
-check (tipo in('empresa','gestor','tecnico')),	
+check (tipo in('Empresa','Gestor','Técnico')),	
 turno varchar(20),
 check (turno in('manhã', 'tarde', 'noite')),
 estado varchar(20),
@@ -131,6 +131,7 @@ select * from leituraMemoriaRam;
 select * from leituraRede;
 select * from leituraCPU;
 select * from Funcionario;
+
 
 
 
