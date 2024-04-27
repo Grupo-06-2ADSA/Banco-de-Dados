@@ -62,16 +62,7 @@ foreign key (fkMaquina) references Maquina(idMaquina),
 foreign key (fkSala) references Sala(idSala),
 foreign key (responsavel) references Funcionario(idFunc));
 
-/*create table infoPc(
-idPc int primary key auto_increment,
-sistemaOperacional varchar(100),
-memoriaUso Long,
-discoUso Long,
-fkMaquina int);
-select * from empresa;
-select * from funcionario; */
-
-create table leituraSO(
+create table LeituraSO(
 idSO int primary key auto_increment,
 nome varchar(45),
 tempoAtividade long,
@@ -80,7 +71,7 @@ fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraDisco(
+create table LeituraDisco(
 idDisco int primary key auto_increment,
 tamanho double,
 leituras double,
@@ -93,19 +84,17 @@ fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraRede(
-idRede int primary key auto_increment,
-nome varchar(70),
-bytesRecebidos long,
-bytesEnviados long,
-pacotesRecebidos long,
-pacotesEnviados long,
+create table LeituraJanelas(
+idJanela int primary key,
+pid int,
+titulo varchar(45),
+totalJanelas int,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraCPU(
+create table LeituraCPU(
 idCPU int primary key auto_increment,
 nome varchar(100),
 emUso double,
@@ -114,7 +103,7 @@ fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraMemoriaRam(
+create table LeituraMemoriaRam(
 idRam int primary key auto_increment,
 emUso double,
 disponivel double,
@@ -128,13 +117,9 @@ select * from Maquina;
 select * from leituraSO;
 select * from leituraDisco;
 select * from leituraMemoriaRam;
-select * from leituraRede;
+select * from leituraJanelas;
 select * from leituraCPU;
 select * from Funcionario;
-
-
-
-
 
 
 
