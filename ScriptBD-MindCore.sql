@@ -48,6 +48,15 @@ fkEmpresa char(14),
 foreign key (fkSala) references Sala(idSala),
 foreign key (fkEmpresa) references Empresa(cnpj));
 
+create table Metricas(
+idMetrica int primary key auto_increment,
+CompCpu int,
+CompDisco double,
+CompRam double,
+fkEmpresa char(14),
+foreign key (fkEmpresa) references Empresa(cnpj));
+
+
 -- CRIAR TABELAS PARA CADA HARDWARE, COM SUAS RESPECTIVAS INFORMAÇÕES!!!
 
 create table HistoricoManutencao(
