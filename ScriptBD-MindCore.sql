@@ -94,9 +94,10 @@ foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
 create table LeituraJanelas(
-idJanela int primary key,
+idJanela int primary key auto_increment,
+identificador long,
 pid int,
-titulo varchar(45),
+titulo varchar(120),
 totalJanelas int,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
@@ -129,7 +130,6 @@ select * from leituraMemoriaRam;
 select * from leituraJanelas;
 select * from leituraCPU;
 select * from Funcionario;
-
 
 
 
