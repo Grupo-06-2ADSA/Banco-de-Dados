@@ -108,6 +108,7 @@ create table LeituraCPU(
 idCPU int primary key auto_increment,
 nome varchar(100),
 emUso double,
+temp double,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
