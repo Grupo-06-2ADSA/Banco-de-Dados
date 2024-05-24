@@ -48,6 +48,15 @@ fkEmpresa char(14),
 foreign key (fkSala) references Sala(idSala),
 foreign key (fkEmpresa) references Empresa(cnpj));
 
+create table Metricas(
+idMetrica int primary key auto_increment,
+CompCpu int,
+CompDisco double,
+CompRam double,
+fkEmpresa char(14),
+foreign key (fkEmpresa) references Empresa(cnpj));
+
+
 -- CRIAR TABELAS PARA CADA HARDWARE, COM SUAS RESPECTIVAS INFORMAÇÕES!!!
 
 create table HistoricoManutencao(
@@ -62,16 +71,7 @@ foreign key (fkMaquina) references Maquina(idMaquina),
 foreign key (fkSala) references Sala(idSala),
 foreign key (responsavel) references Funcionario(idFunc));
 
-/*create table infoPc(
-idPc int primary key auto_increment,
-sistemaOperacional varchar(100),
-memoriaUso Long,
-discoUso Long,
-fkMaquina int);
-select * from empresa;
-select * from funcionario; */
-
-create table leituraSO(
+create table LeituraSO(
 idSO int primary key auto_increment,
 nome varchar(45),
 tempoAtividade long,
@@ -80,7 +80,7 @@ fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraDisco(
+create table LeituraDisco(
 idDisco int primary key auto_increment,
 tamanho double,
 leituras double,
@@ -93,19 +93,18 @@ fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraRede(
-idRede int primary key auto_increment,
-nome varchar(70),
-bytesRecebidos long,
-bytesEnviados long,
-pacotesRecebidos long,
-pacotesEnviados long,
+create table LeituraJanelas(
+idJanela int primary key auto_increment,
+identificador long,
+pid int,
+titulo varchar(120),
+totalJanelas int,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraCPU(
+create table LeituraCPU(
 idCPU int primary key auto_increment,
 nome varchar(100),
 emUso double,
@@ -115,7 +114,7 @@ fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
 );
 
-create table leituraMemoriaRam(
+create table LeituraMemoriaRam(
 idRam int primary key auto_increment,
 emUso double,
 total double,
@@ -128,7 +127,7 @@ select * from Maquina;
 select * from leituraSO;
 select * from leituraDisco;
 select * from leituraMemoriaRam;
-select * from leituraRede;
+select * from leituraJanelas;
 select * from leituraCPU;
 select * from Funcionario;
 select * from sala;
@@ -153,11 +152,6 @@ select s.tempoAtividade, c.emUso, c.temp from leituracpu c join leituraso s wher
 
 -- Leitura ram para plotar no gráfico
 select r.emUso, r.total from leituramemoriaram r join Maquina m where r.fkMaquina = m.idMaquina order by r.dataLeitura limit 7;
-
-
-
-
-
 
 
 
