@@ -32,7 +32,7 @@ telefone char(11),
 tipo varchar(45),
 check (tipo in('Empresa','Gestor','Técnico')),	
 turno varchar(20),
-check (turno in('manhã', 'tarde', 'noite')),
+check (turno in('manha', 'tarde', 'noite')),
 estado varchar(20),
 check (estado in('ativo', 'inativo')),
 fkEmpresa char(14),
@@ -109,6 +109,7 @@ create table leituraCPU(
 idCPU int primary key auto_increment,
 nome varchar(100),
 emUso double,
+temp double,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
 foreign key (fkMaquina) references Maquina(idMaquina)
@@ -117,7 +118,6 @@ foreign key (fkMaquina) references Maquina(idMaquina)
 create table leituraMemoriaRam(
 idRam int primary key auto_increment,
 emUso double,
-disponivel double,
 total double,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
@@ -131,6 +131,29 @@ select * from leituraMemoriaRam;
 select * from leituraRede;
 select * from leituraCPU;
 select * from Funcionario;
+select * from sala;
+select * from historicomanutencao;
+
+-- Componentes em falta
+select nomeComponente, preco from Componentes where quantidade = 0;
+--  Manutenções recorrentes
+select tipo, count(tipo) from HistoricoManutencao group by tipo;
+-- Computadores reservas
+select count(hostname) from Maquina where fkSala = null;
+-- Computadores inoperantes a mais de 1 dia 
+select count(m.hostname) from Maquina m join leituracpu l where l.fkMaquina = m.idMaquina and l.dataLeitura < day(now()); 
+-- Computadores sem limpeza a mais de 6 meses
+SELECT COUNT(DISTINCT h.fkMaquina) 
+FROM historicomanutencao h 
+WHERE h.tipo = 'Limpeza' 
+  AND h.Dia <= DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
+
+-- Leitura cpu para plotar no gráfico
+select s.tempoAtividade, c.emUso, c.temp from leituracpu c join leituraso s where c.fkMaquina = s.fkMaquina order by c.dataLeitura limit 7;
+
+-- Leitura ram para plotar no gráfico
+select r.emUso, r.total from leituramemoriaram r join Maquina m where r.fkMaquina = m.idMaquina order by r.dataLeitura limit 7;
+
 
 
 
