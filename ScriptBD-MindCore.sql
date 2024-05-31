@@ -39,8 +39,7 @@ fkEmpresa char(14),
 foreign key (fkEmpresa) references Empresa(cnpj)
 );
 create table Maquina(
-idMaquina int primary key auto_increment,
-hostname varchar(45),
+hostname varchar(45) primary key,
 ip varchar(45),
 imagem date,
 fkSala int,
@@ -67,7 +66,7 @@ tipo varchar(45),
 fkMaquina int,
 fkSala int,
 responsavel int,
-foreign key (fkMaquina) references Maquina(idMaquina),
+foreign key (fkMaquina) references Maquina(hostname),
 foreign key (fkSala) references Sala(idSala),
 foreign key (responsavel) references Funcionario(idFunc));
 
@@ -77,7 +76,7 @@ nome varchar(45),
 tempoAtividade long,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
-foreign key (fkMaquina) references Maquina(idMaquina)
+foreign key (fkMaquina) references Maquina(hostname)
 );
 
 create table LeituraDisco(
@@ -90,7 +89,7 @@ bytesEscrita double,
 tempoTransferencia long,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
-foreign key (fkMaquina) references Maquina(idMaquina)
+foreign key (fkMaquina) references Maquina(hostname)
 );
 
 create table LeituraJanelas(
@@ -101,7 +100,7 @@ titulo varchar(120),
 totalJanelas int,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
-foreign key (fkMaquina) references Maquina(idMaquina)
+foreign key (fkMaquina) references Maquina(hostname)
 );
 
 create table LeituraCPU(
@@ -111,7 +110,7 @@ emUso double,
 temp double,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
-foreign key (fkMaquina) references Maquina(idMaquina)
+foreign key (fkMaquina) references Maquina(hostname)
 );
 
 create table LeituraMemoriaRam(
@@ -120,7 +119,7 @@ emUso double,
 total double,
 dataLeitura datetime default current_timestamp,
 fkMaquina int,
-foreign key (fkMaquina) references Maquina(idMaquina)
+foreign key (fkMaquina) references Maquina(hostname)
 );
 
 select * from Maquina;
@@ -140,7 +139,7 @@ select tipo, count(tipo) from HistoricoManutencao group by tipo;
 -- Computadores reservas
 select count(hostname) from Maquina where fkSala = null;
 -- Computadores inoperantes a mais de 1 dia 
-select count(m.hostname) from Maquina m join leituracpu l where l.fkMaquina = m.idMaquina and l.dataLeitura < day(now()); 
+select count(m.hostname) from Maquina m join leituracpu l where l.fkMaquina = m.hostname and l.dataLeitura < day(now()); 
 -- Computadores sem limpeza a mais de 6 meses
 SELECT COUNT(DISTINCT h.fkMaquina) 
 FROM historicomanutencao h 
@@ -151,7 +150,7 @@ WHERE h.tipo = 'Limpeza'
 select s.tempoAtividade, c.emUso, c.temp from leituracpu c join leituraso s where c.fkMaquina = s.fkMaquina order by c.dataLeitura limit 7;
 
 -- Leitura ram para plotar no gráfico
-select r.emUso, r.total from leituramemoriaram r join Maquina m where r.fkMaquina = m.idMaquina order by r.dataLeitura limit 7;
+select r.emUso, r.total from leituramemoriaram r join Maquina m where r.fkMaquina = m.hostname order by r.dataLeitura limit 7;
 
 
 
