@@ -23,13 +23,6 @@ fkEmpresa char(14),
 foreign key (fkEmpresa) references Empresa(cnpj)
 );
 
-insert into Sala (nome, andar, fkEmpresa) values
-('ADS A', 3, '22222222222222'),
-('ADS B', 4, '22222222222222'),
-('ADS C', 2, '22222222222222'),
-('SIS', 1, '22222222222222'),
-('CCO', 5, '22222222222222');
-
 create table Funcionario (
 idFunc int primary key auto_increment,
 nome varchar(45),
@@ -53,8 +46,6 @@ fkSala int,
 fkEmpresa char(14),
 foreign key (fkSala) references Sala(idSala),
 foreign key (fkEmpresa) references Empresa(cnpj));
-INSERT into Maquina (hostname, ip, imagem, fkSala, fkEmpresa) values
-('Bruno','11.111.66.2', '2023-06-05', null,'22222222222222');
 
 create table Metricas(
 idMetrica int primary key auto_increment,
