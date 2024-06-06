@@ -23,6 +23,13 @@ fkEmpresa char(14),
 foreign key (fkEmpresa) references Empresa(cnpj)
 );
 
+insert into Sala (nome, andar, fkEmpresa) values
+('ADS A', 3, '22222222222222'),
+('ADS B', 4, '22222222222222'),
+('ADS C', 2, '22222222222222'),
+('SIS', 1, '22222222222222'),
+('CCO', 5, '22222222222222');
+
 create table Funcionario (
 idFunc int primary key auto_increment,
 nome varchar(45),
@@ -46,6 +53,8 @@ fkSala int,
 fkEmpresa char(14),
 foreign key (fkSala) references Sala(idSala),
 foreign key (fkEmpresa) references Empresa(cnpj));
+INSERT into Maquina (hostname, ip, imagem, fkSala, fkEmpresa) values
+('Bruno','11.111.66.2', '2023-06-05', null,'22222222222222');
 
 create table Metricas(
 idMetrica int primary key auto_increment,
@@ -63,7 +72,7 @@ idHistorico int primary key auto_increment,
 Dia date,
 descricao varchar(45),
 tipo varchar(45),
-fkMaquina int,
+fkMaquina varchar(45),
 fkSala int,
 responsavel int,
 foreign key (fkMaquina) references Maquina(hostname),
@@ -75,20 +84,17 @@ idSO int primary key auto_increment,
 nome varchar(45),
 tempoAtividade long,
 dataLeitura datetime default current_timestamp,
-fkMaquina int,
+fkMaquina varchar(45),
 foreign key (fkMaquina) references Maquina(hostname)
 );
 
 create table LeituraDisco(
 idDisco int primary key auto_increment,
-tamanho double,
-leituras double,
-bytesLeitura double,
-escritas double,
-bytesEscrita double,
-tempoTransferencia long,
+total double,
+emUso double,
+disponivel double,
 dataLeitura datetime default current_timestamp,
-fkMaquina int,
+fkMaquina varchar(45),
 foreign key (fkMaquina) references Maquina(hostname)
 );
 
@@ -99,7 +105,7 @@ pid int,
 titulo varchar(120),
 totalJanelas int,
 dataLeitura datetime default current_timestamp,
-fkMaquina int,
+fkMaquina varchar(45),
 foreign key (fkMaquina) references Maquina(hostname)
 );
 
@@ -109,48 +115,21 @@ nome varchar(100),
 emUso double,
 temp double,
 dataLeitura datetime default current_timestamp,
-fkMaquina int,
+fkMaquina varchar(45),
 foreign key (fkMaquina) references Maquina(hostname)
 );
+
 
 create table LeituraMemoriaRam(
 idRam int primary key auto_increment,
 emUso double,
 total double,
 dataLeitura datetime default current_timestamp,
-fkMaquina int,
+fkMaquina varchar(45),
 foreign key (fkMaquina) references Maquina(hostname)
 );
 
-select * from Maquina;
-select * from leituraSO;
-select * from leituraDisco;
-select * from leituraMemoriaRam;
-select * from leituraJanelas;
-select * from leituraCPU;
-select * from Funcionario;
-select * from sala;
-select * from historicomanutencao;
 
--- Componentes em falta
-select nomeComponente, preco from Componentes where quantidade = 0;
---  Manutenções recorrentes
-select tipo, count(tipo) from HistoricoManutencao group by tipo;
--- Computadores reservas
-select count(hostname) from Maquina where fkSala = null;
--- Computadores inoperantes a mais de 1 dia 
-select count(m.hostname) from Maquina m join leituracpu l where l.fkMaquina = m.hostname and l.dataLeitura < day(now()); 
--- Computadores sem limpeza a mais de 6 meses
-SELECT COUNT(DISTINCT h.fkMaquina) 
-FROM historicomanutencao h 
-WHERE h.tipo = 'Limpeza' 
-  AND h.Dia <= DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
-
--- Leitura cpu para plotar no gráfico
-select s.tempoAtividade, c.emUso, c.temp from leituracpu c join leituraso s where c.fkMaquina = s.fkMaquina order by c.dataLeitura limit 7;
-
--- Leitura ram para plotar no gráfico
-select r.emUso, r.total from leituramemoriaram r join Maquina m where r.fkMaquina = m.hostname order by r.dataLeitura limit 7;
 
 
 
