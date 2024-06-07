@@ -18,10 +18,15 @@ foreign key (fkEmpresa) references Empresa(cnpj)
 create table Sala (
 idSala int primary key auto_increment,
 nome varchar(45),
-andar int,
-fkEmpresa char(14),
-foreign key (fkEmpresa) references Empresa(cnpj)
+andar int
 );
+insert into Sala (nome, andar) values
+('ADS A', 3),
+('ADS B', 4),
+('ADS C', 2),
+('SIS', 6),
+('CCO', 5),
+('Reservas', 1);
 
 create table Funcionario (
 idFunc int primary key auto_increment,
@@ -57,17 +62,14 @@ foreign key (fkEmpresa) references Empresa(cnpj));
 
 
 -- CRIAR TABELAS PARA CADA HARDWARE, COM SUAS RESPECTIVAS INFORMAÇÕES!!!
-
 create table HistoricoManutencao(
 idHistorico int primary key auto_increment,
 Dia date,
 descricao varchar(45),
 tipo varchar(45),
 fkMaquina varchar(45),
-fkSala int,
 responsavel int,
 foreign key (fkMaquina) references Maquina(hostname),
-foreign key (fkSala) references Sala(idSala),
 foreign key (responsavel) references Funcionario(idFunc));
 
 create table LeituraSO(
